@@ -1,0 +1,22 @@
+@import "tailwindcss";
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* custom scrollbar */
+.pretty-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pretty-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pretty-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.pretty-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
