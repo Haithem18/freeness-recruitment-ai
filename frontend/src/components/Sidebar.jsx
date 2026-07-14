@@ -8,7 +8,7 @@ import {
   FaBrain,
 } from "react-icons/fa6";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import freenessLogo from "../assets/logos/freeness.png";
 function MenuItem({ icon, label, to, active }) {
   const navigate = useNavigate();
 
@@ -37,9 +37,13 @@ function Sidebar() {
 
         <div className="flex items-center gap-2">
 
-          <div className="w-8 h-8 rounded-lg bg-[#3b1ee8] flex items-center justify-center text-white text-xs font-bold">
-            F
-          </div>
+          <div className="flex justify-center">
+                        <img
+                          src={freenessLogo}
+                          alt="Freeness"
+                          className="w-9 h-auto"
+                        />
+                      </div>
 
           <div>
             <h1 className="font-semibold text-[#3b1ee8] text-sm">

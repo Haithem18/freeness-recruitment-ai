@@ -1,78 +1,47 @@
-import {useState} from "react";
-import {Link,useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import API from "../../services/api";
 
-import {
- Mail,
- Lock,
- Eye,
- ArrowRight
-} from "lucide-react";
+import { Mail, Lock, Eye, ArrowRight } from "lucide-react";
 
 import {
- FaShieldHalved,
- FaBolt,
- FaRocket,
- FaUsers,
- FaGoogle,
- FaLinkedinIn,
- FaCheck
+  FaShieldHalved,
+  FaBolt,
+  FaRocket,
+  FaUsers,
+  FaGoogle,
+  FaLinkedinIn,
+  FaCheck,
 } from "react-icons/fa6";
 
+export default function Login() {
+  const navigate = useNavigate();
 
-export default function Login(){
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
 
+  const submit = async (e) => {
+    e.preventDefault();
 
-const navigate=useNavigate();
+    try {
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+      });
 
-const [email,setEmail]=useState("");
-const [password,setPassword]=useState("");
-const [show,setShow]=useState(false);
+      localStorage.setItem("token", res.data.token);
 
+      navigate("/candidate/dashboard");
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
 
-
-const submit=async(e)=>{
-
-e.preventDefault();
-
-try{
-
-const res=await API.post(
-"/auth/login",
-{
-email,
-password
-}
-);
-
-
-localStorage.setItem(
-"token",
-res.data.token
-);
-
-
-navigate("/candidate/dashboard");
-
-
-}catch(err){
-
-alert(
-err.response?.data?.message ||
-"Login failed"
-)
-
-}
-
-}
-
-
-
-return(
-
-<div
-className="
+  return (
+    <div
+      className="
 min-h-screen
 bg-[#F6F5FF]
 flex
@@ -82,14 +51,11 @@ p-6
 overflow-hidden
 relative
 "
->
+    >
+      {/* background blur */}
 
-
-
-{/* background blur */}
-
-<div
-className="
+      <div
+        className="
 absolute
 w-[500px]
 h-[500px]
@@ -99,11 +65,10 @@ rounded-full
 -top-40
 -left-40
 "
-/>
+      />
 
-
-<div
-className="
+      <div
+        className="
 absolute
 w-[400px]
 h-[400px]
@@ -113,14 +78,10 @@ rounded-full
 bottom-0
 right-0
 "
-/>
+      />
 
-
-
-
-
-<div
-className="
+      <div
+        className="
 w-full
 max-w-[1200px]
 h-[700px]
@@ -134,28 +95,20 @@ grid
 grid-cols-[55%_45%]
 overflow-hidden
 "
->
+      >
+        {/* LEFT */}
 
-
-
-
-
-{/* LEFT */}
-
-<div
-className="
+        <div
+          className="
 relative
 bg-[#FAFAFF]
 p-14
 "
->
+        >
+          {/* dots */}
 
-
-
-{/* dots */}
-
-<div
-className="
+          <div
+            className="
 absolute
 top-8
 left-10
@@ -164,155 +117,114 @@ grid-cols-5
 gap-2
 opacity-40
 "
->
-
-{
-Array.from({length:25}).map((_,i)=>(
-
-<span
-key={i}
-className="
+          >
+            {Array.from({ length: 25 }).map((_, i) => (
+              <span
+                key={i}
+                className="
 w-[3px]
 h-[3px]
 bg-indigo-400
 rounded-full
 "
-/>
+              />
+            ))}
+          </div>
 
-))
-}
+          {/* logo */}
 
-</div>
-
-
-
-
-
-
-{/* logo */}
-
-<div
-className="
+          <div
+            className="
 flex
 items-center
 gap-3
 "
->
-
-<div
-className="
+          >
+            <div
+              className="
 text-indigo-600
 text-5xl
 font-black
 "
->
-F
-</div>
+            >
+              F
+            </div>
 
-
-<div>
-
-<h2
-className="
+            <div>
+              <h2
+                className="
 text-3xl
 font-bold
 text-[#161B3D]
 "
->
-Freeness
-</h2>
+              >
+                Freeness
+              </h2>
 
-<p
-className="
+              <p
+                className="
 text-gray-400
 text-xs
 "
->
-Recruitment AI
-</p>
+              >
+                Recruitment AI
+              </p>
+            </div>
+          </div>
 
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div
-className="
+          <div
+            className="
 mt-14
 "
->
-
-
-<div
-className="
+          >
+            <div
+              className="
 w-10
 h-1
 bg-indigo-600
 rounded
 "
-/>
+            />
 
-
-
-<h1
-className="
+            <h1
+              className="
 mt-5
 text-[42px]
 font-bold
 text-[#161B3D]
 "
->
-Welcome Back
-</h1>
+            >
+              Welcome Back
+            </h1>
 
-
-<p
-className="
+            <p
+              className="
 text-gray-500
 mt-2
 "
->
-Sign in to continue your journey
-with
-
-<span
-className="
+            >
+              Sign in to continue your journey with
+              <span
+                className="
 text-indigo-600
 font-semibold
 "
->
- Freeness
-</span>
+              >
+                Freeness
+              </span>
+            </p>
 
-</p>
+            {/* shield area */}
 
-
-
-
-
-
-
-{/* shield area */}
-
-
-<div
-className="
+            <div
+              className="
 relative
 h-[300px]
 mt-5
 "
->
-
-
-<div
-className="
+            >
+              <div
+                className="
 absolute
 left-1/2
 top-1/2
@@ -331,19 +243,10 @@ to-white
 shadow-[0_20px_50px_rgba(80,60,255,.2)]
 
 "
->
+              ></div>
 
-
-
-
-</div>
-
-
-
-
-
-<div
-className="
+              <div
+                className="
 absolute
 left-1/2
 top-1/2
@@ -363,23 +266,12 @@ flex
 items-center
 justify-center
 "
->
+              >
+                <FaShieldHalved size={80} className="text-indigo-600" />
+              </div>
 
-<FaShieldHalved
-size={80}
-className="text-indigo-600"
-/>
-
-
-</div>
-
-
-
-
-
-
-<div
-className="
+              <div
+                className="
 absolute
 right-28
 top-14
@@ -399,20 +291,12 @@ justify-center
 
 shadow-lg
 "
->
+              >
+                <FaCheck />
+              </div>
 
-<FaCheck/>
-
-</div>
-
-
-
-
-
-
-
-<div
-className="
+              <div
+                className="
 absolute
 left-5
 top-28
@@ -425,21 +309,12 @@ shadow-lg
 
 p-4
 "
->
+              >
+                <FaUsers className="text-indigo-600" />
+              </div>
 
-<FaUsers
-className="text-indigo-600"
-/>
-
-
-</div>
-
-
-
-
-
-<div
-className="
+              <div
+                className="
 absolute
 right-0
 bottom-40
@@ -453,70 +328,45 @@ shadow-lg
 px-4
 py-3
 "
->
-
-<div
-className="
+              >
+                <div
+                  className="
 flex
 items-center
 gap-2
 "
->
+                >
+                  <FaShieldHalved className="text-indigo-600" />
 
-<FaShieldHalved
-className="text-indigo-600"
-/>
-
-
-<span
-className="
+                  <span
+                    className="
 text-xs
 font-semibold
 "
->
-Secure
-</span>
+                  >
+                    Secure
+                  </span>
+                </div>
+              </div>
+            </div>
 
-</div>
+            {/* pills */}
 
-
-</div>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{/* pills */}
-
-<div
-className="
+            <div
+              className="
 flex
 gap-3
 "
->
-
-
-{
-[
-[FaShieldHalved,"Secure"],
-[FaBolt,"Smart"],
-[FaRocket,"Fast"],
-[FaUsers,"Made for opportunities"]
-
-].map(([I,t])=>(
-
-<div
-key={t}
-className="
+            >
+              {[
+                [FaShieldHalved, "Secure"],
+                [FaBolt, "Smart"],
+                [FaRocket, "Fast"],
+                [FaUsers, "Made for opportunities"],
+              ].map(([I, t]) => (
+                <div
+                  key={t}
+                  className="
 bg-white
 rounded-lg
 px-3
@@ -527,87 +377,49 @@ items-center
 gap-2
 text-xs
 "
->
+                >
+                  <I className="text-indigo-600" />
 
-<I
-className="text-indigo-600"
-/>
+                  {t}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
-{t}
+        {/* RIGHT */}
 
-
-</div>
-
-))
-}
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{/* RIGHT */}
-
-
-<div
-className="
+        <div
+          className="
 p-14
 flex
 items-center
 "
->
-
-
-<form
-onSubmit={submit}
-className="
+        >
+          <form
+            onSubmit={submit}
+            className="
 w-full
 space-y-5
 "
->
-
-
-
-<div
-className="relative"
->
-
-<Mail
-className="
+          >
+            <div className="relative">
+              <Mail
+                className="
 absolute
 left-4
 top-1/2
 -translate-y-1/2
 text-indigo-500
 "
-size={17}
-/>
+                size={17}
+              />
 
-
-<input
-
-placeholder="Email address"
-
-value={email}
-
-onChange={
-e=>setEmail(e.target.value)
-}
-
-className="
+              <input
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="
 w-full
 h-14
 rounded-xl
@@ -620,52 +432,27 @@ outline-none
 focus:ring-2
 focus:ring-indigo-400
 "
+              />
+            </div>
 
-/>
-
-
-</div>
-
-
-
-
-
-
-<div
-className="relative"
->
-
-
-<Lock
-className="
+            <div className="relative">
+              <Lock
+                className="
 absolute
 left-4
 top-1/2
 -translate-y-1/2
 text-indigo-500
 "
-size={17}
-/>
+                size={17}
+              />
 
-
-<input
-
-type={
-show?
-"text":
-"password"
-}
-
-placeholder="Password"
-
-value={password}
-
-onChange={
-e=>setPassword(e.target.value)
-}
-
-
-className="
+              <input
+                type={show ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="
 w-full
 h-14
 rounded-xl
@@ -676,13 +463,11 @@ pl-12
 pr-12
 outline-none
 "
+              />
 
-/>
-
-
-<Eye
-onClick={()=>setShow(!show)}
-className="
+              <Eye
+                onClick={() => setShow(!show)}
+                className="
 absolute
 right-4
 top-1/2
@@ -690,62 +475,39 @@ top-1/2
 text-gray-400
 cursor-pointer
 "
-/>
+              />
+            </div>
 
-
-</div>
-
-
-
-
-
-
-<div
-className="
+            <div
+              className="
 flex
 justify-between
 text-xs
 "
->
-
-
-<label
-className="
+            >
+              <label
+                className="
 flex
 gap-2
 items-center
 text-gray-500
 "
->
+              >
+                <input type="checkbox" />
+                Remember me
+              </label>
 
-<input type="checkbox"/>
-
-Remember me
-
-</label>
-
-
-
-<span
-className="
+              <span
+                className="
 text-indigo-600
 "
->
-Forgot password?
-</span>
+              >
+                Forgot password?
+              </span>
+            </div>
 
-
-</div>
-
-
-
-
-
-
-
-<button
-
-className="
+            <button
+              className="
 h-14
 w-full
 
@@ -770,67 +532,42 @@ shadow-lg
 shadow-indigo-500/30
 
 "
->
+            >
+              Login
+              <ArrowRight size={18} />
+            </button>
 
-Login
-
-<ArrowRight size={18}/>
-
-
-</button>
-
-
-
-
-
-
-
-<div
-className="
+            <div
+              className="
 flex
 items-center
 gap-3
 "
->
+            >
+              <div className="h-px bg-gray-200 flex-1" />
 
-<div
-className="h-px bg-gray-200 flex-1"
-/>
-
-<span
-className="
+              <span
+                className="
 text-xs
 text-gray-400
 "
->
-Or continue with
-</span>
+              >
+                Or continue with
+              </span>
 
-<div
-className="h-px bg-gray-200 flex-1"
-/>
+              <div className="h-px bg-gray-200 flex-1" />
+            </div>
 
-
-</div>
-
-
-
-
-
-
-
-<div
-className="
+            <div
+              className="
 grid
 grid-cols-2
 gap-4
 "
->
-
-
-<button
-type="button"
-className="
+            >
+              <button
+                type="button"
+                className="
 h-12
 border
 rounded-xl
@@ -840,18 +577,14 @@ items-center
 gap-2
 text-sm
 "
->
+              >
+                <FaGoogle className="text-red-500" />
+                Google
+              </button>
 
-<FaGoogle className="text-red-500"/>
-
-Google
-
-</button>
-
-
-<button
-type="button"
-className="
+              <button
+                type="button"
+                className="
 h-12
 border
 rounded-xl
@@ -861,60 +594,34 @@ items-center
 gap-2
 text-sm
 "
->
+              >
+                <FaLinkedinIn className="text-blue-600" />
+                LinkedIn
+              </button>
+            </div>
 
-<FaLinkedinIn className="text-blue-600"/>
-
-LinkedIn
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-<p
-className="
+            <p
+              className="
 text-center
 text-sm
 text-gray-500
 "
->
-
-Don't have an account?
-
-<Link
-to="/register"
-className="
+            >
+              Don't have an account?
+              <Link
+                to="/register"
+                className="
 text-indigo-600
 font-semibold
 ml-1
 "
->
-Sign up
-</Link>
-
-
-</p>
-
-
-</form>
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-)
-
+              >
+                Sign up
+              </Link>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }

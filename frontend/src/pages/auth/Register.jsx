@@ -3,97 +3,45 @@ import { Link, useNavigate } from "react-router-dom";
 
 import API from "../../services/api";
 
-import {
-  User,
-  Mail,
-  Lock,
-  Eye,
-  ArrowRight
-} from "lucide-react";
+import { User, Mail, Lock, Eye, ArrowRight } from "lucide-react";
 
 import {
   FaShieldHalved,
   FaBolt,
   FaRocket,
   FaUsers,
-  FaCheck
+  FaCheck,
 } from "react-icons/fa6";
 
+export default function Register() {
+  const navigate = useNavigate();
 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
 
-export default function Register(){
+  const submit = async (e) => {
+    e.preventDefault();
 
-
-const navigate = useNavigate();
-
-
-const [name,setName] = useState("");
-const [email,setEmail] = useState("");
-const [password,setPassword] = useState("");
-const [show,setShow] = useState(false);
-
-
-
-const submit = async (e) => {
-  e.preventDefault();
-
-  try {
-
-    const response = await API.post(
-      "/auth/register",
-      {
+    try {
+      await API.post("/auth/register", {
         name,
         email,
         password,
-      }
-    );
+      });
 
+      alert("Registration successful");
 
-    // Save JWT
-    localStorage.setItem(
-      "token",
-      response.data.token
-    );
+      navigate("/");
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration failed");
+    }
+  };
 
-
-    // Temporary: get verification code
-    localStorage.setItem(
-      "verificationToken",
-      response.data.verificationToken
-    );
-
-
-    localStorage.setItem(
-      "email",
-      email
-    );
-
-
-    alert(
-      "Account created. Please verify your email."
-    );
-
-
-    navigate("/verify-email");
-
-
-  } catch (error) {
-
-    alert(
-      error.response?.data?.message ||
-      "Registration failed"
-    );
-
-  }
-};
-
-
-
-
-return (
-
-<div
-className="
+  return (
+    <div
+      className="
 min-h-screen
 bg-[#F6F5FF]
 flex
@@ -103,16 +51,11 @@ p-6
 overflow-hidden
 relative
 "
->
+    >
+      {/* background */}
 
-
-
-
-
-{/* background */}
-
-<div
-className="
+      <div
+        className="
 absolute
 w-[500px]
 h-[500px]
@@ -122,12 +65,10 @@ rounded-full
 -top-40
 -left-40
 "
-/>
+      />
 
-
-
-<div
-className="
+      <div
+        className="
 absolute
 w-[400px]
 h-[400px]
@@ -137,17 +78,10 @@ rounded-full
 bottom-0
 right-0
 "
-/>
+      />
 
-
-
-
-
-
-
-
-<div
-className="
+      <div
+        className="
 w-full
 max-w-[1200px]
 h-[700px]
@@ -167,34 +101,20 @@ grid-cols-[55%_45%]
 
 overflow-hidden
 "
->
+      >
+        {/* LEFT SIDE */}
 
-
-
-
-
-
-
-
-
-
-{/* LEFT SIDE */}
-
-
-<div
-className="
+        <div
+          className="
 relative
 bg-[#FAFAFF]
 p-14
 "
->
+        >
+          {/* dots */}
 
-
-
-{/* dots */}
-
-<div
-className="
+          <div
+            className="
 absolute
 top-8
 left-10
@@ -205,167 +125,114 @@ gap-2
 
 opacity-40
 "
->
-
-{
-Array.from({length:25}).map((_,i)=>(
-
-<span
-key={i}
-className="
+          >
+            {Array.from({ length: 25 }).map((_, i) => (
+              <span
+                key={i}
+                className="
 w-[3px]
 h-[3px]
 bg-indigo-400
 rounded-full
 "
-/>
+              />
+            ))}
+          </div>
 
-))
-}
+          {/* LOGO */}
 
-</div>
-
-
-
-
-
-
-
-
-{/* LOGO */}
-
-
-<div
-className="
+          <div
+            className="
 flex
 items-center
 gap-3
 "
->
-
-
-<div
-className="
+          >
+            <div
+              className="
 text-indigo-600
 text-5xl
 font-black
 "
->
-F
-</div>
+            >
+              F
+            </div>
 
-
-<div>
-
-<h2
-className="
+            <div>
+              <h2
+                className="
 text-3xl
 font-bold
 text-[#161B3D]
 "
->
-Freeness
-</h2>
+              >
+                Freeness
+              </h2>
 
-
-<p
-className="
+              <p
+                className="
 text-gray-400
 text-xs
 "
->
-Recruitment AI
-</p>
+              >
+                Recruitment AI
+              </p>
+            </div>
+          </div>
 
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div
-className="
+          <div
+            className="
 mt-14
 "
->
-
-
-
-<div
-className="
+          >
+            <div
+              className="
 w-10
 h-1
 bg-indigo-600
 rounded
 "
-/>
+            />
 
-
-
-
-<h1
-className="
+            <h1
+              className="
 mt-5
 text-[42px]
 font-bold
 text-[#161B3D]
 "
->
-Join Us
-</h1>
+            >
+              Join Us
+            </h1>
 
-
-
-<p
-className="
+            <p
+              className="
 text-gray-500
 mt-2
 "
->
-Create your account and start your
-journey with
-
-<span
-className="
+            >
+              Create your account and start your journey with
+              <span
+                className="
 text-indigo-600
 font-semibold
 "
->
- Freeness
-</span>
+              >
+                Freeness
+              </span>
+            </p>
 
-</p>
+            {/* illustration */}
 
-
-
-
-
-
-
-
-{/* illustration */}
-
-
-
-<div
-className="
+            <div
+              className="
 relative
 h-[300px]
 mt-5
 "
->
-
-
-<div
-className="
+            >
+              <div
+                className="
 absolute
 left-1/2
 top-1/2
@@ -383,14 +250,10 @@ to-white
 
 shadow-[0_20px_50px_rgba(80,60,255,.2)]
 "
-/>
+              />
 
-
-
-
-
-<div
-className="
+              <div
+                className="
 absolute
 left-1/2
 top-1/2
@@ -411,26 +274,17 @@ flex
 items-center
 justify-center
 "
->
-
-
-<FaUsers
-size={80}
-className="
+              >
+                <FaUsers
+                  size={80}
+                  className="
 text-indigo-600
 "
-/>
+                />
+              </div>
 
-
-</div>
-
-
-
-
-
-
-<div
-className="
+              <div
+                className="
 absolute
 right-28
 top-14
@@ -450,51 +304,28 @@ justify-center
 
 shadow-lg
 "
->
+              >
+                <FaCheck />
+              </div>
+            </div>
 
-<FaCheck/>
+            {/* pills */}
 
-</div>
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-{/* pills */}
-
-
-<div
-className="
+            <div
+              className="
 flex
 gap-3
 "
->
-
-
-{
-[
-[FaShieldHalved,"Secure"],
-[FaBolt,"Smart"],
-[FaRocket,"Fast"],
-[FaUsers,"Opportunities"]
-
-].map(([Icon,text])=>(
-
-
-<div
-key={text}
-className="
+            >
+              {[
+                [FaShieldHalved, "Secure"],
+                [FaBolt, "Smart"],
+                [FaRocket, "Fast"],
+                [FaUsers, "Opportunities"],
+              ].map(([Icon, text]) => (
+                <div
+                  key={text}
+                  className="
 bg-white
 rounded-lg
 px-3
@@ -508,120 +339,66 @@ gap-2
 
 text-xs
 "
->
-
-
-<Icon
-className="
+                >
+                  <Icon
+                    className="
 text-indigo-600
 "
-/>
+                  />
 
+                  {text}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
-{text}
+        {/* RIGHT SIDE */}
 
-
-</div>
-
-
-))
-}
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* RIGHT SIDE */}
-
-
-
-<div
-className="
+        <div
+          className="
 p-14
 flex
 items-center
 "
->
-
-
-
-<form
-onSubmit={submit}
-
-className="
+        >
+          <form
+            onSubmit={submit}
+            className="
 w-full
 space-y-5
 "
->
-
-
-
-
-
-
-<h2
-className="
+          >
+            <h2
+              className="
 text-3xl
 font-bold
 text-[#161B3D]
 "
->
-Create Account
-</h2>
+            >
+              Create Account
+            </h2>
 
-
-<p
-className="
+            <p
+              className="
 text-gray-400
 text-sm
 mb-6
 "
->
-Register to start using Freeness AI
-</p>
+            >
+              Register to start using Freeness AI
+            </p>
 
+            {/* NAME */}
 
-
-
-
-
-
-
-{/* NAME */}
-
-
-<div
-className="
+            <div
+              className="
 relative
 "
->
-
-<User
-
-size={17}
-
-className="
+            >
+              <User
+                size={17}
+                className="
 absolute
 left-4
 top-1/2
@@ -629,22 +406,13 @@ top-1/2
 
 text-indigo-500
 "
+              />
 
-/>
-
-
-
-<input
-
-placeholder="Full name"
-
-value={name}
-
-onChange={
-e=>setName(e.target.value)
-}
-
-className="
+              <input
+                placeholder="Full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="
 w-full
 h-14
 
@@ -663,35 +431,19 @@ focus:ring-2
 
 focus:ring-indigo-400
 "
+              />
+            </div>
 
-/>
+            {/* EMAIL */}
 
-
-</div>
-
-
-
-
-
-
-
-
-
-{/* EMAIL */}
-
-
-
-<div
-className="
+            <div
+              className="
 relative
 "
->
-
-<Mail
-
-size={17}
-
-className="
+            >
+              <Mail
+                size={17}
+                className="
 absolute
 left-4
 top-1/2
@@ -699,24 +451,14 @@ top-1/2
 
 text-indigo-500
 "
+              />
 
-/>
-
-
-
-<input
-
-type="email"
-
-placeholder="Email address"
-
-value={email}
-
-onChange={
-e=>setEmail(e.target.value)
-}
-
-className="
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="
 w-full
 h-14
 
@@ -735,36 +477,19 @@ focus:ring-2
 
 focus:ring-indigo-400
 "
+              />
+            </div>
 
-/>
+            {/* PASSWORD */}
 
-
-</div>
-
-
-
-
-
-
-
-
-
-{/* PASSWORD */}
-
-
-
-<div
-className="
+            <div
+              className="
 relative
 "
->
-
-
-<Lock
-
-size={17}
-
-className="
+            >
+              <Lock
+                size={17}
+                className="
 absolute
 left-4
 top-1/2
@@ -772,32 +497,14 @@ top-1/2
 
 text-indigo-500
 "
+              />
 
-/>
-
-
-
-
-<input
-
-type={
-show
-?
-"text"
-:
-"password"
-}
-
-placeholder="Password"
-
-value={password}
-
-onChange={
-e=>setPassword(e.target.value)
-}
-
-
-className="
+              <input
+                type={show ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="
 w-full
 h-14
 
@@ -818,19 +525,11 @@ focus:ring-2
 
 focus:ring-indigo-400
 "
+              />
 
-/>
-
-
-
-
-<Eye
-
-onClick={
-()=>setShow(!show)
-}
-
-className="
+              <Eye
+                onClick={() => setShow(!show)}
+                className="
 absolute
 right-4
 top-1/2
@@ -841,22 +540,11 @@ text-gray-400
 
 cursor-pointer
 "
+              />
+            </div>
 
-/>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<label
-className="
+            <label
+              className="
 flex
 gap-2
 items-center
@@ -864,26 +552,12 @@ items-center
 text-sm
 text-gray-500
 "
->
+            >
+              <input type="checkbox" />I agree to terms and privacy policy
+            </label>
 
-<input
-type="checkbox"
-/>
-
-I agree to terms and privacy policy
-
-</label>
-
-
-
-
-
-
-
-
-<button
-
-className="
+            <button
+              className="
 h-14
 w-full
 
@@ -909,76 +583,35 @@ shadow-lg
 
 shadow-indigo-500/30
 "
->
+            >
+              Create Account
+              <ArrowRight size={18} />
+            </button>
 
-
-Create Account
-
-
-<ArrowRight size={18}/>
-
-
-</button>
-
-
-
-
-
-
-
-
-
-<p
-className="
+            <p
+              className="
 text-center
 text-sm
 text-gray-500
 "
->
-
-
-Already have an account?
-
-
-<Link
-to="/"
-
-className="
+            >
+              Already have an account?
+              <Link
+                to="/"
+                className="
 text-indigo-600
 
 font-semibold
 
 ml-1
 "
->
-Login
-</Link>
-
-
-</p>
-
-
-
-
-
-</form>
-
-
-
-</div>
-
-
-
-
-
-
-</div>
-
-
-
-</div>
-
-);
-
-
+              >
+                Login
+              </Link>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }
