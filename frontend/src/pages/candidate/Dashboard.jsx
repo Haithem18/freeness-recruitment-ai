@@ -8,28 +8,21 @@ import ApplicationsCard from "../../components/ApplicationsCard";
 function Dashboard() {
   return (
     <CandidateLayout>
+      <div className="mt-14 p-6">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-8">
+            <StatsCards />
+          </div>
 
-      <h1 className="text-[24px] font-semibold text-[#2d0fd5] mb-6">
-        Mon Tableau de Bord Carrière
-      </h1>
+          <div className="col-span-4">
+            <ProfileCard />
+          </div>
 
-      <div className="grid grid-cols-12 gap-4">
-
-        <div className="col-span-8">
-          <StatsCards />
+          <div className="col-span-8">
+            <ApplicationsCard />
+          </div>
         </div>
-
-        <div className="col-span-4">
-          <ProfileCard />
-        </div>
-
-
-        <div className="col-span-8">
-          <ApplicationsCard />
-        </div>
-
       </div>
-
     </CandidateLayout>
   );
 }

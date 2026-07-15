@@ -22,7 +22,7 @@ export default function Profile() {
 
   const fetchProfil = async () => {
     try {
-      const { data } = await API.get("/candidats/profil");
+      const { data } = await API.get("/candidate/profil");
       setProfil(data);
     } catch (error) {
       console.log(error);

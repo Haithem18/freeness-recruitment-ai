@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   FaBell,
   FaGlobe,
@@ -12,8 +12,10 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // current user — swap for real auth/profile data
+  const isRecruteur = location.pathname.startsWith("/recruteur");
+
   const user = {
     nom: "ben fraj haythem",
     email: "benfrajhaithem864@gmail.com",
@@ -28,7 +30,6 @@ function Navbar() {
         .join("")
     : "";
 
-  // close the dropdown when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -49,11 +50,21 @@ function Navbar() {
       {/* Left */}
       <div className="flex items-center">
         <div className="flex bg-[#f5f5f7] border border-gray-200 rounded-full p-1">
-          <button className="px-5 py-1.5 rounded-full bg-white shadow-sm text-[13px] font-medium text-black">
+          <button
+            onClick={() => navigate("/candidate/dashboard")}
+            className={`px-5 py-1.5 rounded-full text-[13px] font-medium transition ${
+              !isRecruteur ? "bg-white shadow-sm text-black" : "text-gray-600"
+            }`}
+          >
             Candidat
           </button>
 
-          <button className="px-5 py-1.5 rounded-full text-[13px] text-gray-600">
+          <button
+            onClick={() => navigate("/recruteur/dashboard")}
+            className={`px-5 py-1.5 rounded-full text-[13px] font-medium transition ${
+              isRecruteur ? "bg-white shadow-sm text-black" : "text-gray-600"
+            }`}
+          >
             Recruteur
           </button>
         </div>
@@ -83,7 +94,6 @@ function Navbar() {
 
           {isMenuOpen && (
             <div className="absolute right-0 mt-3 w-72 bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-              {/* User info */}
               <div className="flex items-center gap-3 px-4 py-4">
                 <div className="w-10 h-10 rounded-full bg-[#4F46E5] flex items-center justify-center text-[13px] font-semibold text-white shrink-0">
                   {initials || "BF"}
@@ -98,7 +108,6 @@ function Navbar() {
 
               <div className="border-t border-gray-100" />
 
-              {/* Menu items */}
               <div className="py-2">
                 <button
                   onClick={() => {
@@ -114,7 +123,7 @@ function Navbar() {
                 <button
                   onClick={() => {
                     setIsMenuOpen(false);
-                    navigate("/candidat/notifications");
+                    navigate("/candidate/notifications");
                   }}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                 >
@@ -125,7 +134,7 @@ function Navbar() {
                 <button
                   onClick={() => {
                     setIsMenuOpen(false);
-                    navigate("/candidat/transactions");
+                    navigate("/candidate/transactions");
                   }}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                 >
