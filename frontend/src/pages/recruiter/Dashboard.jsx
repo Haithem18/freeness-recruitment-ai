@@ -1,4 +1,8 @@
+import { useEffect, useState } from "react";
 import RecruteurLayout from "../../layouts/RecruteurLayout";
+import GenererOffreModal from "../../components/GenererOffreModal";
+import PublierOffreModal from "../../components/PublierOffreModal";
+import API from "../../services/api";
 import {
   FaFileLines,
   FaPlus,
@@ -7,7 +11,56 @@ import {
   FaUserGroup,
 } from "react-icons/fa6";
 
+// TODO: replace with your real auth user (context/localStorage), like in Navbar.jsx
+const currentUserId = null;
+
 function RecruteurDashboard() {
+  const [offres, setOffres] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showAIModal, setShowAIModal] = useState(false);
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [aiPrefill, setAiPrefill] = useState(null);
+
+  useEffect(() => {
+    fetchOffres();
+  }, []);
+
+  const fetchOffres = async () => {
+    try {
+      const res = await API.get("/offres");
+      const mine = currentUserId
+        ? res.data.filter((o) => o.recruteur?._id === currentUserId)
+        : res.data;
+      setOffres(mine);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreated = (newOffre) => {
+    setOffres((prev) => [newOffre, ...prev]);
+  };
+
+  const handleAIGenerated = (data) => {
+    setAiPrefill(data);
+    setShowAIModal(false);
+    setShowManualModal(true);
+  };
+
+  const handleGoManual = () => {
+    setAiPrefill(null);
+    setShowManualModal(true);
+  };
+
+  const formatDate = (date) =>
+    new Date(date).toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
   return (
     <RecruteurLayout>
       <div className="mt-14 p-6">
@@ -17,7 +70,10 @@ function RecruteurDashboard() {
               <FaFileLines className="text-[#4F46E5]" />
               <h2 className="font-semibold text-[15px]">Offres publiées</h2>
             </div>
-            <button className="bg-[#4F46E5] text-white text-[13px] font-medium px-4 py-2 rounded-lg flex items-center gap-2">
+            <button
+              onClick={() => setShowAIModal(true)}
+              className="bg-[#4F46E5] text-white text-[13px] font-medium px-4 py-2 rounded-lg flex items-center gap-2"
+            >
               <FaPlus size={11} /> Publier une offre
             </button>
           </div>
@@ -51,13 +107,45 @@ function RecruteurDashboard() {
               <span>Statut</span>
               <span>Actif</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-14 text-gray-400">
-              <FaFileLines size={22} className="mb-3" />
-              <p className="text-[14px]">Aucune offre.</p>
-              <button className="mt-3 border border-[#e5e7eb] rounded-lg px-4 py-1.5 text-[13px] text-gray-700">
-                Publier une offre
-              </button>
-            </div>
+
+            {loading ? (
+              <div className="py-14 text-center text-gray-400 text-[14px]">
+                Chargement...
+              </div>
+            ) : offres.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-14 text-gray-400">
+                <FaFileLines size={22} className="mb-3" />
+                <p className="text-[14px]">Aucune offre.</p>
+                <button
+                  onClick={() => setShowAIModal(true)}
+                  className="mt-3 border border-[#e5e7eb] rounded-lg px-4 py-1.5 text-[13px] text-gray-700"
+                >
+                  Publier une offre
+                </button>
+              </div>
+            ) : (
+              offres.map((offre) => (
+                <div
+                  key={offre._id}
+                  className="grid grid-cols-5 px-4 py-3 text-[13px] items-center border-b border-[#f0f0f2] last:border-b-0"
+                >
+                  <span className="font-medium text-gray-900 truncate pr-2">
+                    {offre.titre}
+                  </span>
+                  <span className="text-gray-500">0</span>
+                  <span className="text-gray-500">
+                    {formatDate(offre.datePublication)}
+                  </span>
+                  <span>
+                    <span className="inline-flex items-center gap-1 text-[12px] text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                      Publiée
+                    </span>
+                  </span>
+                  <span className="text-gray-500">Oui</span>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -112,6 +200,23 @@ function RecruteurDashboard() {
           </div>
         </div>
       </div>
+
+      <GenererOffreModal
+        isOpen={showAIModal}
+        onClose={() => setShowAIModal(false)}
+        onGenerated={handleAIGenerated}
+        onManual={handleGoManual}
+      />
+
+      <PublierOffreModal
+        isOpen={showManualModal}
+        onClose={() => {
+          setShowManualModal(false);
+          setAiPrefill(null);
+        }}
+        onCreated={handleCreated}
+        initialData={aiPrefill}
+      />
     </RecruteurLayout>
   );
 }

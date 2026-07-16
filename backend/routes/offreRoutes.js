@@ -7,11 +7,14 @@ import {
   getOffreById,
   updateOffre,
   deleteOffre,
+  generateOffreWithAI,
 } from "../controllers/offreController.js";
 
 const router = express.Router();
 
 router.post("/", protect, createOffre);
+
+router.post("/generate-ai", protect, generateOffreWithAI);
 
 router.get("/", getAllOffres);
 
