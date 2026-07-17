@@ -6,6 +6,7 @@ import {
   getCandidats,
   createProfil,
   getMyProfil,
+  getStats,
 } from "../controllers/candidatController.js";
 
 const router = express.Router();
@@ -17,5 +18,5 @@ router.get("/", getCandidats);
 // Gestion du profil
 router.post("/profil", protect, createProfil);
 router.get("/profil", protect, getMyProfil);
-
+router.get("/stats", protect, getStats);
 export default router;

@@ -12,6 +12,11 @@ export const postuler = async (req, res) => {
 
     res.status(201).json(candidature);
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "Vous avez déjà postulé à cette offre.",
+      });
+    }
     res.status(500).json({
       message: error.message,
     });
@@ -48,9 +53,7 @@ export const getAllCandidatures = async (req, res) => {
 
 export const getCandidatureById = async (req, res) => {
   try {
-    const candidature = await Candidature.findById(
-      req.params.id
-    )
+    const candidature = await Candidature.findById(req.params.id)
       .populate("offre")
       .populate("candidat");
 
@@ -70,16 +73,15 @@ export const getCandidatureById = async (req, res) => {
 
 export const updateStatut = async (req, res) => {
   try {
-    const candidature =
-      await Candidature.findByIdAndUpdate(
-        req.params.id,
-        {
-          statut: req.body.statut,
-        },
-        {
-          returnDocument: "after",
-        }
-      );
+    const candidature = await Candidature.findByIdAndUpdate(
+      req.params.id,
+      {
+        statut: req.body.statut,
+      },
+      {
+        returnDocument: "after",
+      },
+    );
 
     if (!candidature) {
       return res.status(404).json({
@@ -95,15 +97,9 @@ export const updateStatut = async (req, res) => {
   }
 };
 
-export const deleteCandidature = async (
-  req,
-  res
-) => {
+export const deleteCandidature = async (req, res) => {
   try {
-    const candidature =
-      await Candidature.findByIdAndDelete(
-        req.params.id
-      );
+    const candidature = await Candidature.findByIdAndDelete(req.params.id);
 
     if (!candidature) {
       return res.status(404).json({
@@ -112,8 +108,7 @@ export const deleteCandidature = async (
     }
 
     res.json({
-      message:
-        "Candidature supprimée avec succès",
+      message: "Candidature supprimée avec succès",
     });
   } catch (error) {
     res.status(500).json({

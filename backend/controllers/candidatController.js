@@ -63,3 +63,26 @@ export const getCandidats = async (req, res) => {
     });
   }
 };
+export const getStats = async (req, res) => {
+  try {
+    const candidatureCount = await Candidature.countDocuments({
+      candidat: req.user._id,
+    });
+
+    const profil = await Profil.findOne({ user: req.user._id });
+
+    const parStatut = await Candidature.aggregate([
+      { $match: { candidat: req.user._id } },
+      { $group: { _id: "$statut", count: { $sum: 1 } } },
+    ]);
+
+    res.json({
+      totalCandidatures: candidatureCount,
+      portfolioServices: profil ? 1 : 0,
+      repartitionParStatut: parStatut.length,
+      scoreProfil: profil?.scoreProfil ?? null,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -21,11 +21,7 @@ const candidatureSchema = new mongoose.Schema(
 
     statut: {
       type: String,
-      enum: [
-        "EN_ATTENTE",
-        "ACCEPTEE",
-        "REFUSEE"
-      ],
+      enum: ["EN_ATTENTE", "ACCEPTEE", "REFUSEE"],
       default: "EN_ATTENTE",
     },
 
@@ -36,10 +32,9 @@ const candidatureSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-export default mongoose.model(
-  "Candidature",
-  candidatureSchema
-);
+candidatureSchema.index({ offre: 1, candidat: 1 }, { unique: true });
+
+export default mongoose.model("Candidature", candidatureSchema);
